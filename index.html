@@ -7,9 +7,9 @@
     <title>Handle form data with a serverless function</title>
 </head>
 <body>
-    <form action="/handle-form" method="POST">
-        <label for="name">Name</label>
-        <input type="text" id="name">
+    <form name="handleForm" action="/handle-form" method="POST" data-netlify="true">
+        <label>Name</label>
+        <input name="yourname" type="text">
         <button type="submit">Submit</button>
     </form>
 </body>
