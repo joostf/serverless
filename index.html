@@ -75,7 +75,7 @@
             </select>
         </form>
     
-        <form name="handle-form" action="/" method="POST" data-netlify="true">
+        <form name="handleForm" action="/" method="POST" data-netlify="true">
             <h2>Update member data</h2>
             <label>Name</label>
             <input name="name" type="text">
@@ -180,7 +180,7 @@
 
             function populateUpdateForm(member) {
                 console.log(member)
-                const inputs = document.querySelectorAll('form[name="handle-form"] input')
+                const inputs = document.querySelectorAll('form[name="handleForm"] input')
 
                 inputs.forEach(input => {
                     input.value = member[input.name]
