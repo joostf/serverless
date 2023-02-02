@@ -97,6 +97,9 @@
     
             <label>Website</label>
             <input name="website" type="text">
+
+            <label>ID</label>
+            <input name="id" type="text">
     
             <button type="submit">Update member</button>
         </form>
@@ -179,7 +182,6 @@
             })
 
             function populateUpdateForm(member) {
-                console.log(member)
                 const inputs = document.querySelectorAll('form[name="handleForm"] input')
 
                 inputs.forEach(input => {
