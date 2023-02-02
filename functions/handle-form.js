@@ -4,9 +4,10 @@ const fetch = require('node-fetch');
 
 const handler = async (event) => {
   try {
-    const data = querystring.parse(event.body);
-    const mutatedData = await postMemberData(data)
-
+    if (event.httpMethod === "POST" && event.path === "/handle-form") {
+      const data = querystring.parse(event.body);
+      const mutatedData = await postMemberData(data)
+    }
     return {
       statusCode: 200,
       body: JSON.stringify({ message: "Member updated!", data:mutatedData }),
