@@ -8,10 +8,18 @@ const handler = async (event) => {
     const data = querystring.parse(event.body)
     const mutatedData = await postMemberData(data)
 
+    // return {
+    //   statusCode: 200,
+    //   body: JSON.stringify({ message: "Member updated!", data:mutatedData }),
+    // }
+
     return {
-      statusCode: 200,
-      body: JSON.stringify({ message: "Member updated!", data:mutatedData }),
-    }
+      statusCode: 302,
+      headers: {
+        Location: event.headers.referer,
+      },
+      body: JSON.stringify({ message: "Redirecting..." }),
+    };
   } catch (error) {
     return { statusCode: 500, body: error.toString() }
   }
