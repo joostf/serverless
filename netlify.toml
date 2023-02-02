@@ -3,5 +3,5 @@
 
 [[redirects]]
   from = "/handle-form"
-  to = "/functions/handle-form"
+  to = "/.netlfiy/functions/handle-form"
   status = 200
