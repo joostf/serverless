@@ -2,6 +2,6 @@
   functions = "./functions"
 
 [[redirects]]
-  from = "/*"
-  to = "/index.html"
+  from = "/handle-form"
+  to = "/functions/handle-form"
   status = 200
