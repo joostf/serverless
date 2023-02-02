@@ -4,12 +4,12 @@ const handler = async (event) => {
   try {
     const data = JSON.parse(event.body);
 
-    const mutatedData = await postMemberData(data)
-    console.log(mutatedData)
+    //const mutatedData = await postMemberData(data)
+    //console.log(mutatedData)
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ message: `Member: ${mutatedData.name} updated!`, data:mutatedData }),
+      body: JSON.stringify({ message: `Member: ${mutatedData.name} updated!`, data:data }),
     }
   } catch (error) {
     return { statusCode: 500, body: error.toString() }
