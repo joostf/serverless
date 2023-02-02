@@ -1,15 +1,15 @@
 // Docs on event and context https://docs.netlify.com/functions/build/#code-your-function-2
 const handler = async (event) => {
-  console.log(1, event.body)
+  console.log(1, event)
   try {
     const data = JSON.parse(event.body);
 
-    //const mutatedData = await postMemberData(data)
-    //console.log(mutatedData)
+    const mutatedData = await postMemberData(data)
+    console.log(mutatedData)
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ message: `Member updated!`, data:data }),
+      body: JSON.stringify({ message: `Member updated!`, data:mutatedData }),
     }
   } catch (error) {
     return { statusCode: 500, body: error.toString() }
@@ -49,7 +49,7 @@ async function postMemberData (data) {
   })
   const tribeData = await response.json()
 
-  console.dir(tribeData)
+  return tribeData
 }
 
 module.exports = { handler }
