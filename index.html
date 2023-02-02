@@ -87,7 +87,7 @@
             <input name="surname" type="text">
     
             <label>Github handle</label>
-            <input name="githubHandle" type="text">
+            <input name="gitHubHandle" type="text">
     
             <label>Avatar</label>
             <input name="avatar" type="text">
@@ -179,6 +179,7 @@
             })
 
             function populateUpdateForm(member) {
+                console.log(member)
                 const inputs = document.querySelectorAll('form[name="handleForm"] input')
 
                 inputs.forEach(input => {
@@ -191,3 +192,18 @@
     </script>
 </body>
 </html>
+
+<!-- 
+Netlfiy form / serverless functions requirements:
+https://answers.netlify.com/t/support-guide-form-problems-form-debugging-404-when-submitting/92
+
+# You need to have a netlify or data-netlify=true attribute in your HTML <form …> definition. Note that once the form is processed during deploy, the resulting HTML that we serve will NOT have that parameter in it anymore!
+# You need to include a name attribute on the opening <form> tag. When the page is deployed we will add a hidden input with a form-name attribute that’s the same as the name you set for the form. This is used in our API to determine which form is receiving the input. This is handled automatically as long as the HTML form includes a name.
+# Do not include extended symbols like @ in your <form ...> html definition. These will prevent our form detection from finding your form!
+# Apostrophes (') are a hard no in the attribute values of input tags. For example, value="Don't do this" would result in build errors. Instead use value="Do not do this".
+# The name in the opening <form> tag needs to be unique on your site. You can reuse it on other sites.
+# Every input in the form must have a “name” attribute 153. Something like <input name="email" ...> or <textarea name="message" ...> is what you need. The name is sent along with the value in the submission and our API will only record data from form submissions with names matching the definition as parsed at deploy time.
+# The name in each of your <input> tags needs to be unique within that form - can’t have two name=contact fields in the same form!
+# Make sure that you POST your form request (not GET) with a Content-Type of application/x-www-form-urlencoded in most cases. However, if and only if you are submitting the form with a file upload then the Content-Type needs to be multipart/form-data instead.
+# We use Akismet on all form submissions 160. If you see the form in the app.netlify.com 142 UI, but you don’t see any of your test submissions, double check that you aren’t sending junk info in your test submissions or submitting over and over again from the same IP address (which looks spammy and may be hidden in our UI until you choose to view the spam submissions 154).
+ -->
