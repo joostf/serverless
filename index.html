@@ -5,12 +5,189 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Handle form data with a serverless function</title>
+
+    <style>
+        :root {
+            --primary:mediumseagreen;
+            --alternate:#fff;
+        }
+        body {
+            display:flex;
+            font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
+        }
+        main, aside {
+            min-width:20em;
+            max-width: 30em;
+            padding:2rem
+        }
+        main ul {
+            list-style:none;
+            padding:0;
+            display:flex;
+            flex-wrap: wrap;
+        }
+        main ul li {
+            margin:.5rem
+        }
+        form > * {
+            font-size:inherit
+        }
+        label, input {
+            display:block
+        }
+        label {
+            margin-bottom: .25rem;
+        }
+        input{
+            width:100%;
+            margin-bottom: .5rem;
+        } 
+        a {
+            color:var(--primary)
+        }
+        button {
+            all:unset;
+            border-radius:.25rem;
+            background-color:var(--primary);
+            padding:.25rem .5rem;
+            color:var(--alternate);
+            transition:.25s
+        }
+        button:hover, button:focus {
+            transform:scale(1.1)
+        }
+    </style>
 </head>
 <body>
-    <form name="handleForm" action="/handle-form" method="POST" data-netlify="true">
-        <label>Name</label>
-        <input name="yourname" type="text">
-        <button type="submit">Submit</button>
-    </form>
+    <main>
+        <h1>CMD Tribe Members</h1>
+        <ul>
+            <!-- inserted members from API -->
+        </ul>
+    </main>
+
+    <aside>
+        <form name="selectMember">
+            <h2>Select member</h2>
+            <label>Members</label>
+            <select name="members">
+                <!-- inserted members from API -->
+            </select>
+        </form>
+    
+        <form name="handleForm" action="/handle-form" method="POST" data-netlify="true">
+            <h2>Update member data</h2>
+            <label>Name</label>
+            <input name="name" type="text">
+            
+            <label>Prefix</label>
+            <input name="prefix" type="text">
+    
+            <label>Surname</label>
+            <input name="surname" type="text">
+    
+            <label>Github handle</label>
+            <input name="githubHandle" type="text">
+    
+            <label>Avatar</label>
+            <input name="avatar" type="text">
+    
+            <label>Nickname</label>
+            <input name="nickname" type="text">
+    
+            <label>Website</label>
+            <input name="website" type="text">
+    
+            <button type="submit">Update member</button>
+        </form>
+    </aside>
+
+    <script>
+        const endpoint = 'https://api-eu-central-1-shared-euc1-02.hygraph.com/v2/cld1s02hl0aaa01tbexz632ph/master'
+        
+        getTribeMembers()
+        
+        async function getTribeMembers(){
+            const fdnd = 'cldczdhrg17n70auof1yy895k'
+            const cmd = 'cldcsotzp0z3a0avws7swvjcz'
+            const query = `
+            query Members {
+                tribe(where: {id: "${cmd}"}) {
+                name
+                slug
+                avatar
+                gitHubUrl
+                website
+                squads {
+                    name
+                    slug
+                    cohort
+                    website
+                    description {
+                    html
+                    }
+                    members (first:100) {
+                    id    
+                    name
+                    prefix
+                    surname
+                    nickname
+                    bio {
+                        html
+                        
+                    }
+                        avatar
+                        website
+                        role
+                        gitHubHandle
+                    }
+                }
+                }
+            }`
+            
+            const variables = {} 
+            const headers = {}
+            const response = await fetch(endpoint, {
+                method: 'POST',
+                body: JSON.stringify({ query, variables }), 
+                headers: headers
+            })
+            const {data: {tribe}} = await response.json()
+
+            const members = tribe.squads[0].members
+            const contentList = document.querySelector('main > ul')
+            const selectBox = document.querySelector('form[name="selectMember"] select')
+
+
+            
+            members.forEach(member => {
+                selectBox.insertAdjacentHTML('afterbegin',`
+                    <option value="${member.id}">${member.name}</option>
+                `)
+
+                contentList.insertAdjacentHTML('afterbegin',`
+                    <li>
+                        <a href="/${member.id}">${member.name}</a>
+                    </li>
+                `)
+            });
+
+            selectBox.addEventListener('change', function(event){
+                const member = members.filter(member => member.id == event.target.value)
+
+                populateUpdateForm(member[0])
+            })
+
+            function populateUpdateForm(member) {
+                const inputs = document.querySelectorAll('form[name="handleForm"] input')
+
+                inputs.forEach(input => {
+                    input.value = member[input.name]
+                })
+            }
+        }
+
+        
+    </script>
 </body>
 </html>
