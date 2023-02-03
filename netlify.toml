@@ -1,7 +1,2 @@
 [build]
   functions = "./functions"
-
-[[redirects]]
-  from = "/handle-form"
-  to = "/.netlfiy/functions/handle-form"
-  status = 200
